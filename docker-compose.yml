@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    container_name: myapp_web
+    env_file:
+      - .env   # use .env exactly as you requested
+    ports:
+      - "${PORT:-8000}:8000"
+    restart: unless-stopped
+    volumes:
+      - ./:/app:rw
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-8000}/docs"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional: run langgraph dev server inside a separate service (useful for local dev only)
+  langgraph-dev:
+    image: python:3.11-slim
+    container_name: langgraph_dev
+    command: bash -lc "pip install --no-cache-dir 'langgraph-cli[inmem]' && langgraph dev --host 0.0.0.0 --port 2024"
+    env_file:
+      - .env
+    ports:
+      - "2024:2024"
+    volumes:
+      - ./:/app:rw
+    restart: "no"

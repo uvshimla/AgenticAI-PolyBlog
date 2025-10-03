@@ -1,0 +1,12 @@
+langchain
+langgraph
+langchain_community
+langchain_core
+langchain_groq
+langchain_openai
+groq
+fastapi
+uvicorn
+watchdog
+langgraph-cli[inmem]
+python-dotenv
